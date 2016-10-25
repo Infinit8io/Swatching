@@ -2,10 +2,13 @@ package io.infinit8.swatching;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ChooseMovies extends AppCompatActivity {
 
@@ -24,5 +27,18 @@ public class ChooseMovies extends AppCompatActivity {
 
         lv.setAdapter(adapter);
 
+        Button btnConfirm = (Button)findViewById(R.id.btnConfirm);
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nextAct();
+            }
+        });
+
+    }
+
+    public void nextAct(){
+        Toast.makeText(this, "Here's where I'd put the next activity.\nIf I had one !", Toast.LENGTH_LONG).show();
     }
 }
