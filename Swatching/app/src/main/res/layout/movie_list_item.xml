@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableRow
+        android:id="@+id/row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip">
+        <ImageView
+            android:id="@+id/poster"
+            android:maxWidth="50dip"/>
+        <TextView
+            android:id="@+id/movieTitle"/>
+    </TableRow>
+
+</TableLayout>
