@@ -1,5 +1,6 @@
 package io.infinit8.swatching;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +44,8 @@ public class ChooseMovies extends AppCompatActivity {
     }
 
     public void nextAct(){
-        Toast.makeText(this, "Here's where I'd put the next activity.\nIf I had one !", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Here's where I'd put the next activity.\nIf I had one !", Toast.LENGTH_LONG).show();
+        Intent in = new Intent(this, DisplayMovie.class);
+        startActivity(in);
     }
 }
