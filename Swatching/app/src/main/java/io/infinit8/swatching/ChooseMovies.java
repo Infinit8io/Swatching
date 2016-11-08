@@ -22,7 +22,6 @@ public class ChooseMovies extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_choose_movies);
 
-        getSupportActionBar().hide();
 
         ArrayList<Movie> movies = Movie.getPopularMovies();
 

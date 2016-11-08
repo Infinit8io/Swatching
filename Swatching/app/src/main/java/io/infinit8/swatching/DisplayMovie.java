@@ -1,10 +1,14 @@
 package io.infinit8.swatching;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -25,7 +29,15 @@ public class DisplayMovie extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_display_movie);
+        setContentView(R.layout.parallax_toolbar);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
+
 
         FrameLayout fl = (FrameLayout)findViewById(R.id.imgLayout);
 
@@ -33,10 +45,13 @@ public class DisplayMovie extends AppCompatActivity {
         Point size = new Point();
         display.getRealSize(size);
 
-        TypedValue tv = new TypedValue();
-        getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
-        fl.getLayoutParams().height = size.y-getNavigationBarHeight()-actionBarHeight;
+        //Not dynamic at all - To change !
+        //Obvious comment is obvious.
+        collapsingToolbar.setTitle("Batman Begins");
+        collapsingToolbar.setExpandedTitleTextColor(ColorStateList.valueOf(Color.argb(0,0,0,0)));
+
+        collapsingToolbar.getLayoutParams().height = size.y-getNavigationBarHeight();
+        fl.getLayoutParams().height = collapsingToolbar.getLayoutParams().height;
         fl.requestLayout();
 
 
