@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_display_movie"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.infinit8.swatching.DisplayMovie">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="520dp"
+                android:layout_weight="100">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    app:srcCompat="@drawable/batman"
+                    android:id="@+id/Img_Back"
+                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/First_Page"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:text="Batman Begins"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView6"
+                        android:textAlignment="center"
+                        android:textStyle="normal|bold"
+                        android:textSize="40sp"
+                        android:textColor="@android:color/white"
+                        android:textAllCaps="true"
+                        android:layout_marginTop="100dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/Sous_Titres">
+
+                        <TextView
+                            android:text="Action / Suspense"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView7"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/white"
+                            android:textAlignment="viewStart"
+                            android:textStyle="normal|italic" />
+
+                        <RatingBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ratingBar2"
+                            android:layout_weight="1"
+                            style="@android:style/Widget.Material.RatingBar.Small"
+                            android:numStars="10"
+                            android:rating="7" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:text="I will watch it !"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button7" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:text="Seen and good !"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/button6"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:text="Seen and bad !"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/button5"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <include layout="@layout/content_scrolling" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
