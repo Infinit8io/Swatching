@@ -8,10 +8,87 @@
     tools:context="io.infinit8.swatching.ScrollingActivity"
     tools:showIn="@layout/activity_scrolling">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="100">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="680px"
+                app:srcCompat="@drawable/cover_batman_begins"
+                android:id="@+id/imageView3"
+                android:layout_weight="1"
+                android:layout_height="465px"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="Batman Begins (2005)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Headline"
+                    android:layout_marginTop="100px" />
+
+                <TextView
+                    android:text="Action/Suspense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:layout_weight="1" />
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ratingBar"
+                    android:layout_weight="1"
+                    style="@android:style/Widget.Material.RatingBar.Small"
+                    android:numStars="10"
+                    android:rating="7" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:text="Synopsys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Headline"
+            android:layout_marginLeft="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/large_text"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+        <Button
+            android:text="Watch Trailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal"
+            />
+    </LinearLayout>
+
 
 </android.support.v4.widget.NestedScrollView>

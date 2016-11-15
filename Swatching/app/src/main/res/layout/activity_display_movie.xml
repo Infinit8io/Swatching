@@ -120,7 +120,61 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <include layout="@layout/content_scrolling" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="100">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="380px"
+                        app:srcCompat="@drawable/cover_batman_begins"
+                        android:id="@+id/imageView3"
+                        android:layout_weight="1"
+                        android:layout_height="300px"
+                        android:layout_marginLeft="10px"
+                        android:layout_marginRight="10px" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:text="Batman Begins (2005)"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView2"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:text="Action/Suspense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView3"
+                            android:layout_weight="1" />
+
+                        <RatingBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ratingBar"
+                            android:layout_weight="1"
+                            style="@android:style/Widget.Material.RatingBar.Small"
+                            android:numStars="10"
+                            android:rating="7" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
