@@ -22,6 +22,9 @@ public class CheckTMDbTask extends AsyncTask<String, Void, Object> {
             try{
                 URL url = new URL("https://api.themoviedb.org/3/movie/"+strings[1]+"?api_key="+Config.TMDB_API_KEY+"&language=fr-FR");
                 HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                if(urlConnection.getResponseCode() != 200){
+                    return null;
+                }
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 StringBuilder sb = new StringBuilder();
@@ -34,7 +37,7 @@ public class CheckTMDbTask extends AsyncTask<String, Void, Object> {
             } catch(Exception e){
                 e.printStackTrace();
             }
-        } else if(strings[0] == "GET_POSTER") {
+        } else if(strings[0] == "GET_PICTURE") {
             try {
                 URL url = new URL(strings[1]);
                 return BitmapFactory.decodeStream(url.openConnection().getInputStream());

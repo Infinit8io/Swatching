@@ -3,6 +3,7 @@ package io.infinit8.swatching;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -21,6 +22,13 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class DisplayMovie extends AppCompatActivity {
 
@@ -54,7 +62,49 @@ public class DisplayMovie extends AppCompatActivity {
         fl.getLayoutParams().height = collapsingToolbar.getLayoutParams().height;
         fl.requestLayout();
 
+        ShakeListener sl = new ShakeListener(this);
 
+        sl.setOnShakeListener(new ShakeListener.OnShakeListener() {
+            @Override
+            public void onShake() {
+                showSearchMovieToast();
+                String value = null;
+                while(value == null){
+                    int movieId = (int)(Math.random()*40000);
+                    try {
+                        value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    JSONObject jmovie = new JSONObject(value);
+                    String title = jmovie.getString("title");
+                    float rating = (float)jmovie.getDouble("vote_average");
+                    JSONArray jgenres = jmovie.getJSONArray("genres");
+                    String[] genres = new String[jgenres.length()];
+                    for(int i=0;i<jgenres.length(); i++){
+                        genres[i] = ((JSONObject)jgenres.get(i)).getString("name");
+                    }
+                    String releaseDate = jmovie.getString("release_date");
+                    int releaseYear = Integer.parseInt(releaseDate.split("-")[0]);
+                    String synopsys = jmovie.getString("overview");
+                    Bitmap poster = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w154"+jmovie.getString("poster_path")).get();
+                    Bitmap backdrop = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w1280"+jmovie.getString("backdrop_path")).get();
+
+                    updateInterface(title, genres, rating, releaseYear, synopsys, poster, backdrop);
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
+    public void showSearchMovieToast(){
+        Toast.makeText(this, "Looking for a movie...", Toast.LENGTH_LONG).show();
     }
 
     public int getNavigationBarHeight()
@@ -66,5 +116,34 @@ public class DisplayMovie extends AppCompatActivity {
             return getResources().getDimensionPixelSize(resourceId);
         }
         return 0;
+    }
+
+    public void updateInterface(String title, String[] genres, float rating, int releaseYear, String synopsys, Bitmap poster, Bitmap backdrop){
+        TextView parTitle = (TextView)findViewById(R.id.txt_title_paralax);
+        TextView parGenres = (TextView)findViewById(R.id.txt_genres_paralax);
+        RatingBar parRating = (RatingBar)findViewById(R.id.rating_paralax);
+        ImageView parBackdrop = (ImageView)findViewById(R.id.backdrop_paralax);
+
+        ImageView descPoster = (ImageView)findViewById(R.id.cover_desc);
+        TextView descTitle = (TextView)findViewById(R.id.title_desc);
+        TextView descGenres = (TextView)findViewById(R.id.genres_desc);
+        RatingBar descRating = (RatingBar)findViewById(R.id.rating_desc);
+        TextView descSynopsys = (TextView)findViewById(R.id.synopsys_desc);
+
+        parTitle.setText(title);
+        String genresStr = "";
+        for(String g : genres){
+            genresStr += g+" / ";
+        }
+        genresStr.substring(0, genresStr.length()-2);
+        parGenres.setText(genresStr);
+        parRating.setRating(rating);
+        parBackdrop.setImageBitmap(backdrop);
+
+        descPoster.setImageBitmap(poster);
+        descTitle.setText(title+" ("+releaseYear+")");
+        descGenres.setText(genresStr);
+        descRating.setRating(rating);
+        descSynopsys.setText(synopsys);
     }
 }
