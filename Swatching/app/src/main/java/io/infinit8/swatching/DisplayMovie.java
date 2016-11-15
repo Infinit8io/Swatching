@@ -70,8 +70,10 @@ public class DisplayMovie extends AppCompatActivity {
                 showSearchMovieToast();
                 String value = null;
                 while(value == null){
-                    int movieId = (int)(Math.random()*40000);
+                    //Put beautiful search algorithm here.
+
                     try {
+                        int movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
                         value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
                     } catch(Exception e){
                         e.printStackTrace();
@@ -135,7 +137,7 @@ public class DisplayMovie extends AppCompatActivity {
         for(String g : genres){
             genresStr += g+" / ";
         }
-        genresStr.substring(0, genresStr.length()-2);
+        genresStr = genresStr.substring(0, genresStr.length()-2);
         parGenres.setText(genresStr);
         parRating.setRating(rating);
         parBackdrop.setImageBitmap(backdrop);
