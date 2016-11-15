@@ -28,36 +28,11 @@ public class Movie {
     private int idGenre;
     private Bitmap poster;
 
-    public Movie(int id, String title, int idGenre){
+    public Movie(int id, String title, int idGenre, Bitmap poster){
         this.id = id;
         this.title = title;
         this.idGenre = idGenre;
-        requestPoster();
-    }
-
-    public static ArrayList<Movie> getPopularMovies(){
-        ArrayList<Movie> movieArrayList = new ArrayList<>();
-        try {
-            String res = (String) new CheckTMDbTask().execute("GET_POPULAR", "1").get();
-            JSONObject resObj = new JSONObject(res);
-            JSONArray results = resObj.getJSONArray("results");
-            for(int i = 0; i < results.length(); i++){
-                JSONObject mov = (JSONObject)results.get(i);
-                movieArrayList.add(new Movie(mov.getInt("id"), mov.getString("title"), mov.getJSONArray("genre_ids").getInt(0)));
-            }
-
-            res = (String) new CheckTMDbTask().execute("GET_POPULAR", "2").get();
-            resObj = new JSONObject(res);
-            results = resObj.getJSONArray("results");
-            for(int i = 0; i < results.length(); i++){
-                JSONObject mov = (JSONObject)results.get(i);
-                movieArrayList.add(new Movie(mov.getInt("id"), mov.getString("title"), mov.getJSONArray("genre_ids").getInt(0)));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return movieArrayList;
+        this.poster = poster;
     }
 
     public int getId() {
@@ -86,19 +61,6 @@ public class Movie {
 
     public Bitmap getPoster(){
         return poster;
-    }
-
-    public void requestPoster(){
-        String baseUrl = "http://image.tmdb.org/t/p/w154";
-        try {
-            String res = (String)new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(id)).get();
-            JSONObject jsonObject = new JSONObject(res);
-            baseUrl += jsonObject.getString("poster_path");
-            this.poster = (Bitmap)new CheckTMDbTask().execute("GET_POSTER", baseUrl).get();
-
-        } catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
 
