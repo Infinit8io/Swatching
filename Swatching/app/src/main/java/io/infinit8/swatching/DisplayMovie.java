@@ -67,7 +67,6 @@ public class DisplayMovie extends AppCompatActivity {
         sl.setOnShakeListener(new ShakeListener.OnShakeListener() {
             @Override
             public void onShake() {
-                showSearchMovieToast();
                 String value = null;
                 while(value == null){
                     //Put beautiful search algorithm here.
@@ -132,6 +131,8 @@ public class DisplayMovie extends AppCompatActivity {
         RatingBar descRating = (RatingBar)findViewById(R.id.rating_desc);
         TextView descSynopsys = (TextView)findViewById(R.id.synopsys_desc);
 
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
         parTitle.setText(title);
         String genresStr = "";
         for(String g : genres){
@@ -147,5 +148,6 @@ public class DisplayMovie extends AppCompatActivity {
         descGenres.setText(genresStr);
         descRating.setRating(rating);
         descSynopsys.setText(synopsys);
+        collapsingToolbar.setTitle(title);
     }
 }
