@@ -15,4 +15,7 @@
         "Le jeune Bruce Wayne assiste impuissant au meurtre de ses parents. Profondément traumatisé, il grandit obnubilé par un désir de vengeance et voyage aux quatre coins du monde pour étudier la criminologie et les arts martiaux. La Ligue des ombres, une secte de guerriers ninja dirigée par Ra's al Ghul, se chargera de son entraînement physique. De retour chez lui à Gotham City, le jeune homme se charge de la gestion de Wayne Enterprises dont il est l'héritier. Opérant depuis le sous-sol du manoir familial avec l'aide de son majordome Alfred Pennyworth, Bruce Wayne se lance alors dans la lutte contre le crime sous le nom de Batman."
     </string>
     <string name="action_settings">Settings</string>
+
+    <!-- System related strings -->
+    <string name="preferences_key">io.infinit8.swatching.preferences</string>
 </resources>

@@ -1,11 +1,14 @@
 package io.infinit8.swatching;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.support.annotation.IntegerRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +34,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 public class DisplayMovie extends AppCompatActivity {
+
+    SharedPreferences sharedPref;
+    Set<String> willWatch;
+    int actMovId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +52,26 @@ public class DisplayMovie extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.parallax_toolbar);
 
+        Context context = this;
+
+        sharedPref = context.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+
+        willWatch = sharedPref.getStringSet("will_watch", new HashSet<String>());
+        Button btnWillWatch = (Button) findViewById(R.id.btnWillWatch);
+
+        btnWillWatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                willWatch.add(Integer.toString(actMovId));
+                String logstr = "Movies in will_watch: ";
+                for(String s : willWatch){
+                    logstr += s+" ";
+                }
+                Log.d("Movies", logstr);
+                sharedPref.edit().putStringSet("will_watch", willWatch).apply();
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,17 +101,21 @@ public class DisplayMovie extends AppCompatActivity {
             @Override
             public void onShake() {
                 String value = null;
+                int movieId = 0;
                 while(value == null){
                     //Put beautiful search algorithm here.
 
                     try {
-                        int movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
+                        movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
+                        if(willWatch.contains(Integer.toString(movieId)))
+                            continue; //Here is the flying spaghetti monster
                         value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
                     } catch(Exception e){
                         e.printStackTrace();
                     }
                 }
                 try {
+                    actMovId = movieId;
                     JSONObject jmovie = new JSONObject(value);
                     String title = jmovie.getString("title");
                     float rating = (float)jmovie.getDouble("vote_average");
@@ -102,10 +139,6 @@ public class DisplayMovie extends AppCompatActivity {
         });
 
 
-    }
-
-    public void showSearchMovieToast(){
-        Toast.makeText(this, "Looking for a movie...", Toast.LENGTH_LONG).show();
     }
 
     public int getNavigationBarHeight()
@@ -138,7 +171,7 @@ public class DisplayMovie extends AppCompatActivity {
         for(String g : genres){
             genresStr += g+" / ";
         }
-        genresStr = genresStr.substring(0, genresStr.length()-2);
+        genresStr = genresStr.substring(0, genresStr.length()-2); // La belle astuce !
         parGenres.setText(genresStr);
         parRating.setRating(rating);
         parBackdrop.setImageBitmap(backdrop);

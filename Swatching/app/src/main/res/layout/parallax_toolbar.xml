@@ -115,7 +115,7 @@
                         android:text="I will watch it !"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/button7" />
+                        android:id="@+id/btnWillWatch" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -126,14 +126,14 @@
                             android:text="Seen and good !"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/button6"
+                            android:id="@+id/btnLikedIt"
                             android:layout_weight="1" />
 
                         <Button
                             android:text="Seen and bad !"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/button5"
+                            android:id="@+id/btnIsBad"
                             android:layout_weight="1" />
                     </LinearLayout>
 
