@@ -9,8 +9,10 @@ import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,39 +21,67 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChooseMovies extends AppCompatActivity {
+
+    // Liste des films sélectionés
+    ArrayList<Movie> chosenMovies = new ArrayList<Movie>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Suppression du titre et full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Layout de choose movies
         setContentView(R.layout.activity_choose_movies);
 
+        // Récupération des films dans le json
         ArrayList<Movie> movies = getMoviesFromJson();
 
-        ListView lv = (ListView)findViewById(R.id.listMovies);
+        // GridView des films
+        GridView gv = (GridView) findViewById(R.id.listMovies);
 
-        MovieListAdapter mlAdapter = new MovieListAdapter(this, R.layout.movie_list_item, movies);
+        // Adapter de grid
+        MovieGridAdapter mgAdapter = new MovieGridAdapter(this, R.layout.movie_grid_item, movies);
+        gv.setAdapter(mgAdapter);
 
-        lv.setAdapter(mlAdapter);
-
-        Button btnConfirm = (Button)findViewById(R.id.btnConfirm);
+        // Bouton de confirmation
+        Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Affichage des éléments sélectionnés
+                for (Movie m: chosenMovies) {
+                    // TODO: Save movies and category points in file
+                    Toast toast = Toast.makeText(getApplicationContext(), "Title : " + m.getTitle() + " Cat" + m.getIdGenre(), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                // Changement d'activité
                 nextAct();
             }
         });
 
+        // Clique sur une case de film de la grille
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Movie item = (Movie) parent.getItemAtPosition(position);
+                // Ajout du film aux films sélectionnés
+                chosenMovies.add(item);
+            }
+        });
     }
+
 
     public void nextAct(){
         Intent in = new Intent(this, DisplayMovie.class);
