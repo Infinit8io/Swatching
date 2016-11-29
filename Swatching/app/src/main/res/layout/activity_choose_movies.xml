@@ -9,12 +9,15 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="io.infinit8.swatching.ChooseMovies">
+
+
     <TextView
         android:id="@+id/lblLikedMovies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="@string/text_liked_movies"/>
+
 
     <Button
         android:text="@string/btn_confirm_text"
@@ -27,13 +30,21 @@
         android:layout_alignParentStart="true"
         style="@style/Widget.AppCompat.Button.Colored"
         />
-    <ListView
+    
+    <GridView
         android:id="@+id/listMovies"
-        android:layout_marginTop="20sp"
-        android:layout_marginBottom="20sp"
         android:layout_below="@id/lblLikedMovies"
         android:layout_above="@id/btnConfirm"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:columnWidth="100dp"
+        android:drawSelectorOnTop="true"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"
+        android:focusable="true"
+        android:clickable="true"/>
 
 </RelativeLayout>
