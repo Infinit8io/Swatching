@@ -15,10 +15,10 @@ import java.util.ArrayList;
  * Created by Dom on 29.11.2016.
  */
 
-
 public class MovieGridAdapter extends ArrayAdapter<Movie> {
     private Context context;
     private int layoutResourceId;
+    private boolean selected;
     private ArrayList<Movie> data = new ArrayList<Movie>();
 
     public MovieGridAdapter(Context context, int layoutResourceId, ArrayList data) {
@@ -26,6 +26,7 @@ public class MovieGridAdapter extends ArrayAdapter<Movie> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+        this.selected = false;
     }
 
     @Override
@@ -49,6 +50,8 @@ public class MovieGridAdapter extends ArrayAdapter<Movie> {
         // Set movie image item infos
         holder.imageTitle.setText(item.getTitle());
         holder.image.setImageBitmap(item.getPoster());
+
+
         return row;
     }
 

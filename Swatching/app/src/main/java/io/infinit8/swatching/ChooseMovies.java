@@ -3,6 +3,7 @@ package io.infinit8.swatching;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -33,6 +34,7 @@ public class ChooseMovies extends AppCompatActivity {
 
     // Liste des films sélectionés
     ArrayList<Movie> chosenMovies = new ArrayList<Movie>();
+    GridView gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +51,11 @@ public class ChooseMovies extends AppCompatActivity {
         ArrayList<Movie> movies = getMoviesFromJson();
 
         // GridView des films
-        GridView gv = (GridView) findViewById(R.id.listMovies);
+        gv = (GridView) findViewById(R.id.listMovies);
+        gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
         // Adapter de grid
-        MovieGridAdapter mgAdapter = new MovieGridAdapter(this, R.layout.movie_grid_item, movies);
+        final MovieGridAdapter mgAdapter = new MovieGridAdapter(this, R.layout.movie_grid_item, movies);
         gv.setAdapter(mgAdapter);
 
         // Bouton de confirmation
@@ -62,6 +65,7 @@ public class ChooseMovies extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Affichage des éléments sélectionnés
+
                 for (Movie m: chosenMovies) {
                     // TODO: Save movies and category points in file
                     Toast toast = Toast.makeText(getApplicationContext(), "Title : " + m.getTitle() + " Cat" + m.getIdGenre(), Toast.LENGTH_SHORT);
@@ -76,8 +80,18 @@ public class ChooseMovies extends AppCompatActivity {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Movie item = (Movie) parent.getItemAtPosition(position);
-                // Ajout du film aux films sélectionnés
-                chosenMovies.add(item);
+
+                // Changement d'état
+                if(chosenMovies.contains(item)){
+                    v.setBackgroundColor(Color.TRANSPARENT);
+                    chosenMovies.remove(item);
+                }else{
+                    v.setBackgroundColor(Color.GREEN);
+                    chosenMovies.add(item);
+                }
+
+
+                mgAdapter.notifyDataSetChanged();
             }
         });
     }
