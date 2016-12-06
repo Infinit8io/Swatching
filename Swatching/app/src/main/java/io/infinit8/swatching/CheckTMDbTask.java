@@ -3,6 +3,8 @@ package io.infinit8.swatching;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 

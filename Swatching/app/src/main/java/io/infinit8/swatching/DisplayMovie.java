@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,6 +58,8 @@ public class DisplayMovie extends AppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        FirebaseCrash.log("Application launched");
+
         Context context = this;
 
         sharedPref = context.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
@@ -68,18 +71,12 @@ public class DisplayMovie extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(actMovId));
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "User liked this movie");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_will_watch", params);
 
                 willWatch.add(Integer.toString(actMovId));
-                String logstr = "Movies in will_watch: ";
-                for(String s : willWatch){
-                    logstr += s+" ";
-                }
-                Log.d("Movies", logstr);
                 sharedPref.edit().putStringSet("will_watch", willWatch).apply();
             }
         });
@@ -137,6 +134,7 @@ public class DisplayMovie extends AppCompatActivity {
             actMovId = movieId;
             JSONObject jmovie = new JSONObject(value);
             String title = jmovie.getString("title");
+            FirebaseCrash.log("Got movie info for "+title);
             float rating = (float)jmovie.getDouble("vote_average");
             JSONArray jgenres = jmovie.getJSONArray("genres");
             String[] genres = new String[jgenres.length()];
