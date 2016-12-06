@@ -81,7 +81,7 @@ public class ChooseMovies extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Movie item = (Movie) parent.getItemAtPosition(position);
 
-                // Changement d'état
+                // Changement d'état si déjà sélectionné ou non
                 if(chosenMovies.contains(item)){
                     v.setBackgroundColor(Color.TRANSPARENT);
                     chosenMovies.remove(item);
@@ -89,7 +89,6 @@ public class ChooseMovies extends AppCompatActivity {
                     v.setBackgroundColor(Color.GREEN);
                     chosenMovies.add(item);
                 }
-
 
                 mgAdapter.notifyDataSetChanged();
             }

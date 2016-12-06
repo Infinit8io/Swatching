@@ -97,6 +97,7 @@ public class DisplayMovie extends AppCompatActivity {
 
         ShakeListener sl = new ShakeListener(this);
 
+
         sl.setOnShakeListener(new ShakeListener.OnShakeListener() {
             @Override
             public void onShake() {
