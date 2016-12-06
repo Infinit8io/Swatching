@@ -86,9 +86,8 @@ public class DisplayMovie extends AppCompatActivity {
         Point size = new Point();
         display.getRealSize(size);
 
-        //Not dynamic at all - To change !
-        //Obvious comment is obvious.
-        collapsingToolbar.setTitle("Batman Begins");
+        getNewMovie();
+
         collapsingToolbar.setExpandedTitleTextColor(ColorStateList.valueOf(Color.argb(0,0,0,0)));
 
         collapsingToolbar.getLayoutParams().height = size.y-getNavigationBarHeight();
@@ -101,45 +100,49 @@ public class DisplayMovie extends AppCompatActivity {
         sl.setOnShakeListener(new ShakeListener.OnShakeListener() {
             @Override
             public void onShake() {
-                String value = null;
-                int movieId = 0;
-                while(value == null){
-                    //Put beautiful search algorithm here.
-
-                    try {
-                        movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
-                        if(willWatch.contains(Integer.toString(movieId)))
-                            continue; //Here is the flying spaghetti monster
-                        value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
-                    } catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
-                try {
-                    actMovId = movieId;
-                    JSONObject jmovie = new JSONObject(value);
-                    String title = jmovie.getString("title");
-                    float rating = (float)jmovie.getDouble("vote_average");
-                    JSONArray jgenres = jmovie.getJSONArray("genres");
-                    String[] genres = new String[jgenres.length()];
-                    for(int i=0;i<jgenres.length(); i++){
-                        genres[i] = ((JSONObject)jgenres.get(i)).getString("name");
-                    }
-                    String releaseDate = jmovie.getString("release_date");
-                    int releaseYear = Integer.parseInt(releaseDate.split("-")[0]);
-                    String synopsys = jmovie.getString("overview");
-                    Bitmap poster = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w154"+jmovie.getString("poster_path")).get();
-                    Bitmap backdrop = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w1280"+jmovie.getString("backdrop_path")).get();
-
-                    updateInterface(title, genres, rating, releaseYear, synopsys, poster, backdrop);
-
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                getNewMovie();
             }
         });
 
 
+    }
+
+    public void getNewMovie(){
+        String value = null;
+        int movieId = 0;
+        while(value == null){
+            //Put beautiful search algorithm here.
+
+            try {
+                movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
+                if(willWatch.contains(Integer.toString(movieId)))
+                    continue; //Here is the flying spaghetti monster
+                value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        try {
+            actMovId = movieId;
+            JSONObject jmovie = new JSONObject(value);
+            String title = jmovie.getString("title");
+            float rating = (float)jmovie.getDouble("vote_average");
+            JSONArray jgenres = jmovie.getJSONArray("genres");
+            String[] genres = new String[jgenres.length()];
+            for(int i=0;i<jgenres.length(); i++){
+                genres[i] = ((JSONObject)jgenres.get(i)).getString("name");
+            }
+            String releaseDate = jmovie.getString("release_date");
+            int releaseYear = Integer.parseInt(releaseDate.split("-")[0]);
+            String synopsys = jmovie.getString("overview");
+            Bitmap poster = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w154"+jmovie.getString("poster_path")).get();
+            Bitmap backdrop = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w1280"+jmovie.getString("backdrop_path")).get();
+
+            updateInterface(title, genres, rating, releaseYear, synopsys, poster, backdrop);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public int getNavigationBarHeight()

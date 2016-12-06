@@ -1,6 +1,8 @@
 package io.infinit8.swatching;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -28,7 +30,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChooseMovies extends AppCompatActivity {
 
@@ -36,9 +40,19 @@ public class ChooseMovies extends AppCompatActivity {
     ArrayList<Movie> chosenMovies = new ArrayList<Movie>();
     GridView gv;
 
+    Set<String> watchedMovies;
+    Set<String> likedGenres;
+
+    SharedPreferences sharedPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        sharedPrefs = this.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        watchedMovies = sharedPrefs.getStringSet("watched_movies", new HashSet<String>());
+        likedGenres = sharedPrefs.getStringSet("liked_genres", new HashSet<String>());
 
         // Suppression du titre et full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -64,13 +78,16 @@ public class ChooseMovies extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Affichage des éléments sélectionnés
-
+                // Enregistrement des éléments sélectionnés dans les listes
                 for (Movie m: chosenMovies) {
-                    // TODO: Save movies and category points in file
-                    Toast toast = Toast.makeText(getApplicationContext(), "Title : " + m.getTitle() + " Cat" + m.getIdGenre(), Toast.LENGTH_SHORT);
-                    toast.show();
+                    watchedMovies.add(Integer.toString(m.getId()));
+                    likedGenres.add(Integer.toString(m.getIdGenre()));
                 }
+
+                // Enregistrement des listes dans les SharedPreferences
+                sharedPrefs.edit().putStringSet("watched_movies", watchedMovies).apply();
+                sharedPrefs.edit().putStringSet("liked_genres", likedGenres).apply();
+
                 // Changement d'activité
                 nextAct();
             }

@@ -1,6 +1,8 @@
 package io.infinit8.swatching;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,9 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -19,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
+        Set<String> watchedMovies = sp.getStringSet("watched_movies", new HashSet<String>());
+        if(watchedMovies.size() != 0){
+            //There are some movies, not the first use
+            Intent in = new Intent(this, DisplayMovie.class);
+            startActivity(in);
+        }
         setContentView(R.layout.activity_main);
 
         Display display = getWindowManager().getDefaultDisplay();
