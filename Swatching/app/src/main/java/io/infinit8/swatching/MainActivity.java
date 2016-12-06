@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(in);
         }
         setContentView(R.layout.activity_main);
+
+        FirebaseCrash.log("Application first use");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();

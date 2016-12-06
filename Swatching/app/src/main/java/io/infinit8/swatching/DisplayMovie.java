@@ -30,6 +30,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -44,6 +47,7 @@ public class DisplayMovie extends AppCompatActivity {
     SharedPreferences sharedPref;
     Set<String> willWatch;
     int actMovId;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class DisplayMovie extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.parallax_toolbar);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        FirebaseCrash.log("Application launched");
 
         Context context = this;
 
@@ -63,13 +71,40 @@ public class DisplayMovie extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_will_watch", params);
+
                 willWatch.add(Integer.toString(actMovId));
-                String logstr = "Movies in will_watch: ";
-                for(String s : willWatch){
-                    logstr += s+" ";
-                }
-                Log.d("Movies", logstr);
                 sharedPref.edit().putStringSet("will_watch", willWatch).apply();
+                getNewMovie();
+            }
+        });
+
+        Button btnLikedIt = (Button)findViewById(R.id.btnLikedIt);
+
+        btnLikedIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_liked_it", params);
+                getNewMovie();
+            }
+        });
+
+        Button btnIsBad = (Button)findViewById(R.id.btnIsBad);
+
+        btnIsBad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_disliked_it", params);
+                getNewMovie();
             }
         });
 
@@ -126,6 +161,7 @@ public class DisplayMovie extends AppCompatActivity {
             actMovId = movieId;
             JSONObject jmovie = new JSONObject(value);
             String title = jmovie.getString("title");
+            FirebaseCrash.log("Got movie info for "+title);
             float rating = (float)jmovie.getDouble("vote_average");
             JSONArray jgenres = jmovie.getJSONArray("genres");
             String[] genres = new String[jgenres.length()];
