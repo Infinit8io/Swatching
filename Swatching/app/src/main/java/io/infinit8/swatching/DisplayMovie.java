@@ -78,6 +78,33 @@ public class DisplayMovie extends AppCompatActivity {
 
                 willWatch.add(Integer.toString(actMovId));
                 sharedPref.edit().putStringSet("will_watch", willWatch).apply();
+                getNewMovie();
+            }
+        });
+
+        Button btnLikedIt = (Button)findViewById(R.id.btnLikedIt);
+
+        btnLikedIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_liked_it", params);
+                getNewMovie();
+            }
+        });
+
+        Button btnIsBad = (Button)findViewById(R.id.btnIsBad);
+
+        btnIsBad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle params = new Bundle();
+                params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
+                params.putInt("movie_id", actMovId);
+                mFirebaseAnalytics.logEvent("user_disliked_it", params);
+                getNewMovie();
             }
         });
 
