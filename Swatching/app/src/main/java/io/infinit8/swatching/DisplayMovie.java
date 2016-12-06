@@ -30,6 +30,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -44,6 +46,7 @@ public class DisplayMovie extends AppCompatActivity {
     SharedPreferences sharedPref;
     Set<String> willWatch;
     int actMovId;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class DisplayMovie extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.parallax_toolbar);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Context context = this;
 
@@ -62,6 +67,12 @@ public class DisplayMovie extends AppCompatActivity {
         btnWillWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(actMovId));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "User liked this movie");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 willWatch.add(Integer.toString(actMovId));
                 String logstr = "Movies in will_watch: ";
