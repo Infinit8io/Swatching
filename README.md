@@ -1,10 +1,15 @@
 # Swatching
-
 [![Join the chat at https://gitter.im/Infinit8io/Swatching](https://badges.gitter.im/Infinit8io/Swatching.svg)](https://gitter.im/Infinit8io/Swatching?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Application Android proposant des films.
+Application Android proposant des films en fonction des goûts de l'utilisateur. Lors de la première utilisation, il est demandé de choisir les films vu et aimés parmi une liste de films sélectionnés avec soin et appartenant à des genres variés. Cela permet de dresser un profil de préférences de base de l'utilisateur pour ensuite cibler correctement les films qui lui sont proposés. 
 
-## Liste des genres (mise ici, parce que _why not_)
+## Fonctionnalités
+
+Sur la page de proposition d'un film, il suffit de secouer légèrement le téléphone pour se faire conseiller un autre film. Si un film donne envie à l'utilisateur, il peut cliquer "I will watch it!". Cela ajoutera ce film à sa liste "To Watch" et il pourra confirmer s'il l'a vu et aimé ou pas aimé par la suite.
+
+Si le film proposé a déjà été vu par l'utilisateur, il a le choix entre "Seen and good!" ou "Seen and bad!"
+
+## Liste des genres
 
 ```json
 {
