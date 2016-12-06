@@ -96,16 +96,23 @@ public class ChooseMovies extends AppCompatActivity {
         // Clique sur une case de film de la grille
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
                 Movie item = (Movie) parent.getItemAtPosition(position);
 
                 // Changement d'état si déjà sélectionné ou non
                 if(chosenMovies.contains(item)){
-                    v.setBackgroundColor(Color.TRANSPARENT);
+                    item.setChecked(false);
                     chosenMovies.remove(item);
                 }else{
-                    v.setBackgroundColor(Color.GREEN);
+                    item.setChecked(true);
                     chosenMovies.add(item);
                 }
+
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context," ITEM :" + item.getTitle() + " id:" + id, duration);
+                toast.show();
 
                 mgAdapter.notifyDataSetChanged();
             }

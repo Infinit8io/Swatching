@@ -27,6 +27,7 @@ public class Movie {
     private String title;
     private int idGenre;
     private Bitmap poster;
+    private boolean checked;
 
     public Movie(int id, String title, int idGenre, Bitmap poster){
         this.id = id;
@@ -62,6 +63,9 @@ public class Movie {
     public Bitmap getPoster(){
         return poster;
     }
+
+    public boolean getChecked(){ return checked; }
+    public void setChecked(boolean isChecked){ this.checked = isChecked; }
 
 
 }

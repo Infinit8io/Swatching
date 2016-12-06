@@ -2,6 +2,7 @@ package io.infinit8.swatching;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,12 @@ public class MovieGridAdapter extends ArrayAdapter<Movie> {
 
         Movie item = data.get(position);
 
+        if(item.getChecked()){
+            row.setBackgroundColor(Color.GREEN);
+        }else{
+            row.setBackgroundColor(Color.TRANSPARENT);
+        }
+
         // Set movie image item infos
         holder.imageTitle.setText(item.getTitle());
         holder.image.setImageBitmap(item.getPoster());
@@ -54,6 +61,8 @@ public class MovieGridAdapter extends ArrayAdapter<Movie> {
 
         return row;
     }
+
+
 
     static class ViewHolder {
         TextView imageTitle;
