@@ -46,6 +46,8 @@ public class DisplayMovie extends AppCompatActivity {
 
     SharedPreferences sharedPref;
     Set<String> willWatch;
+    Set<String> likedMovies;
+    Set<String> skippedMovies;
     int actMovId;
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -65,6 +67,8 @@ public class DisplayMovie extends AppCompatActivity {
         sharedPref = context.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
 
         willWatch = sharedPref.getStringSet("will_watch", new HashSet<String>());
+        likedMovies = sharedPref.getStringSet("liked_movies", new HashSet<String>());
+        skippedMovies = sharedPref.getStringSet("skipped_movies", new HashSet<String>());
         Button btnWillWatch = (Button) findViewById(R.id.btnWillWatch);
 
         btnWillWatch.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +95,9 @@ public class DisplayMovie extends AppCompatActivity {
                 params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
                 params.putInt("movie_id", actMovId);
                 mFirebaseAnalytics.logEvent("user_liked_it", params);
+
+                likedMovies.add(Integer.toString(actMovId));
+                sharedPref.edit().putStringSet("liked_movies", likedMovies).apply();
                 getNewMovie();
             }
         });
@@ -104,6 +111,9 @@ public class DisplayMovie extends AppCompatActivity {
                 params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
                 params.putInt("movie_id", actMovId);
                 mFirebaseAnalytics.logEvent("user_disliked_it", params);
+
+                skippedMovies.add(Integer.toString(actMovId));
+                sharedPref.edit().putStringSet("skipped_movies", skippedMovies).apply();
                 getNewMovie();
             }
         });
@@ -150,7 +160,7 @@ public class DisplayMovie extends AppCompatActivity {
 
             try {
                 movieId = (int)new CheckTMDbTask().execute("GET_RANDOM_ID").get();
-                if(willWatch.contains(Integer.toString(movieId)))
+                if(willWatch.contains(Integer.toString(movieId)) || likedMovies.contains(Integer.toString(movieId)))
                     continue; //Here is the flying spaghetti monster
                 value = (String) new CheckTMDbTask().execute("MOVIE_INFO", Integer.toString(movieId)).get();
             } catch(Exception e){
