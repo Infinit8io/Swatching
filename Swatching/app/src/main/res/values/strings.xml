@@ -7,7 +7,7 @@
     <string name="btn_start_text">COMMENCER !</string>
 
     <!-- Liked movies strings -->
-    <string name="text_liked_movies">Touchez les films que vous avez aimé.</string>
+    <string name="text_liked_movies">Quels films avez-vous aimés ?</string>
     <string name="btn_confirm_text">CONFIRMER</string>
     <string name="title_activity_display_movie">DisplayMovie</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>

@@ -48,14 +48,16 @@ public class MovieGridAdapter extends ArrayAdapter<Movie> {
 
         Movie item = data.get(position);
 
+        holder = new ViewHolder();
+        holder.image = (ImageView) row.findViewById(R.id.image);
         if(item.getChecked()){
-            row.setBackgroundColor(Color.GREEN);
+            holder.image.setAlpha(1f);
         }else{
-            row.setBackgroundColor(Color.TRANSPARENT);
+
+            holder.image.setAlpha(0.5f);
         }
 
         // Set movie image item infos
-        holder.imageTitle.setText(item.getTitle());
         holder.image.setImageBitmap(item.getPoster());
 
 

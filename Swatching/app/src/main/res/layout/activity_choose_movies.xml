@@ -16,8 +16,11 @@
         android:id="@+id/lblLikedMovies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/text_liked_movies"/>
+        android:text="@string/text_liked_movies"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:layout_marginBottom="10dp"
+        android:layout_centerVertical="false"
+        android:layout_centerHorizontal="true" />
 
 
     <Button

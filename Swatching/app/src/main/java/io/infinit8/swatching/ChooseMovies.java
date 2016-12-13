@@ -107,13 +107,6 @@ public class ChooseMovies extends AppCompatActivity {
                     item.setChecked(true);
                     chosenMovies.add(item);
                 }
-
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context," ITEM :" + item.getTitle() + " id:" + id, duration);
-                toast.show();
-
                 mgAdapter.notifyDataSetChanged();
             }
         });
