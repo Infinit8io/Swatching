@@ -7,15 +7,21 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -27,9 +33,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidadvance.topsnackbar.TSnackbar;
+import com.bowyer.app.fabtoolbar.FabToolbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 
@@ -41,6 +50,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import butterknife.ButterKnife;
 
 public class DisplayMovie extends AppCompatActivity {
 
@@ -50,6 +62,9 @@ public class DisplayMovie extends AppCompatActivity {
     Set<String> skippedMovies;
     int actMovId;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    FabToolbar fabToolbar;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +84,33 @@ public class DisplayMovie extends AppCompatActivity {
         willWatch = sharedPref.getStringSet("will_watch", new HashSet<String>());
         likedMovies = sharedPref.getStringSet("liked_movies", new HashSet<String>());
         skippedMovies = sharedPref.getStringSet("skipped_movies", new HashSet<String>());
-        Button btnWillWatch = (Button) findViewById(R.id.btnWillWatch);
 
-        btnWillWatch.setOnClickListener(new View.OnClickListener() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fabToolbar = (FabToolbar) findViewById(R.id.fabtoolbar);
+
+        ButterKnife.bind(this);
+
+        fabToolbar.setFab(fab);
+
+        //fabToolbar.expandFab();
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fabToolbar.expandFab();
+            }
+        });
+
+        RelativeLayout willwatch = (RelativeLayout)findViewById(R.id.willwatch);
+        willwatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TSnackbar snackbar = TSnackbar.make(view, "You'll watch that movie.", Snackbar.LENGTH_SHORT);
+                View snackbarView = snackbar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                textView.setTextColor(Color.WHITE);
+                snackbar.show();
+
 
                 Bundle params = new Bundle();
                 params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
@@ -86,11 +123,16 @@ public class DisplayMovie extends AppCompatActivity {
             }
         });
 
-        Button btnLikedIt = (Button)findViewById(R.id.btnLikedIt);
-
-        btnLikedIt.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout likedit = (RelativeLayout)findViewById(R.id.likedit);
+        likedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TSnackbar snackbar = TSnackbar.make(view, "You liked that movie.", Snackbar.LENGTH_SHORT);
+                View snackbarView = snackbar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                textView.setTextColor(Color.WHITE);
+                snackbar.show();
+
                 Bundle params = new Bundle();
                 params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
                 params.putInt("movie_id", actMovId);
@@ -102,11 +144,16 @@ public class DisplayMovie extends AppCompatActivity {
             }
         });
 
-        Button btnIsBad = (Button)findViewById(R.id.btnIsBad);
-
-        btnIsBad.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout skip = (RelativeLayout)findViewById(R.id.skip);
+        skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TSnackbar snackbar = TSnackbar.make(view, "You skipped that movie.", Snackbar.LENGTH_SHORT);
+                View snackbarView = snackbar.getView();
+                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                textView.setTextColor(Color.WHITE);
+                snackbar.show();
+
                 Bundle params = new Bundle();
                 params.putString("movie_title", ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString());
                 params.putInt("movie_id", actMovId);
@@ -118,11 +165,25 @@ public class DisplayMovie extends AppCompatActivity {
             }
         });
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
+        AppBarLayout abl = (AppBarLayout)findViewById(R.id.appbar);
+        abl.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if(state == State.EXPANDED){
+                    if(!fabToolbar.isFabExpanded())
+                        fabToolbar.expandFab();
+                } else {
+                    fabToolbar.contractFab();
+                }
+            }
+        });
 
 
         FrameLayout fl = (FrameLayout)findViewById(R.id.imgLayout);

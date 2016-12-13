@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_thumbs_up_down_white_24dp"/>
+
+
+
+
 
     <include layout="@layout/content_scrolling" />
 
@@ -103,45 +114,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/buttons_layout"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:paddingBottom="5dp">
-                    <Button
-                        android:text="I will watch it !"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnWillWatch" />
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <Button
-                            android:text="Seen and good !"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/btnLikedIt"
-                            android:layout_weight="1" />
-
-                        <Button
-                            android:text="Seen and bad !"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/btnIsBad"
-                            android:layout_weight="1" />
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
             </FrameLayout>
 
         </LinearLayout>
@@ -168,5 +141,71 @@
 
 
 </android.support.design.widget.AppBarLayout>
+
+    <com.bowyer.app.fabtoolbar.FabToolbar
+        android:id="@+id/fabtoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:tb_color="@color/colorAccent"
+        app:tb_container_gravity="center"
+        app:tb_anim_duration="400"
+        app:tb_fab_type="normal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/willwatch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/ic_willwatch"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_visibility_white_24dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/likedit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/ic_likedit"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_favorite_white_24dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/skip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/ic_skip"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_skip_next_white_24dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </com.bowyer.app.fabtoolbar.FabToolbar>
+
 
 </android.support.design.widget.CoordinatorLayout>
