@@ -127,7 +127,7 @@ public class DisplayMovie extends AppCompatActivity {
         likedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TSnackbar snackbar = TSnackbar.make(view, "You liked that movie.", Snackbar.LENGTH_SHORT);
+                TSnackbar snackbar = TSnackbar.make(view, "You liked that movie.", TSnackbar.LENGTH_SHORT);
                 View snackbarView = snackbar.getView();
                 TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
@@ -148,7 +148,7 @@ public class DisplayMovie extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TSnackbar snackbar = TSnackbar.make(view, "You skipped that movie.", Snackbar.LENGTH_SHORT);
+                TSnackbar snackbar = TSnackbar.make(view, "You skipped that movie.", TSnackbar.LENGTH_SHORT);
                 View snackbarView = snackbar.getView();
                 TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
