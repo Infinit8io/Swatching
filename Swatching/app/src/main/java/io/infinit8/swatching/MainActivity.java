@@ -16,6 +16,8 @@ import android.widget.Button;
 
 import com.google.firebase.crash.FirebaseCrash;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
             Intent in = new Intent(this, DisplayMovie.class);
             startActivity(in);
         }
+
+        ArrayList<Movie> emptyList = new ArrayList<Movie>();
+        // Création des fichiers de cache.
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "0", emptyList);
+            InternalStorage.writeObject(getApplicationContext(), "1", emptyList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_main);
 
         FirebaseCrash.log("Application first use");
