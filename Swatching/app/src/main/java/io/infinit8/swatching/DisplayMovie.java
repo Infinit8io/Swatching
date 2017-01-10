@@ -81,6 +81,8 @@ public class DisplayMovie extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.parallax_toolbar);
 
+        Intent myIntent = getIntent();
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         FirebaseCrash.log("Application launched");
@@ -242,7 +244,13 @@ public class DisplayMovie extends AppCompatActivity {
         Point size = new Point();
         display.getRealSize(size);
 
-        getNewMovie();
+        if(myIntent.hasExtra("movie_id")){
+            getNewMovie(myIntent.getStringExtra("movie_id"));
+        } else {
+            getNewMovie();
+        }
+
+
 
         collapsingToolbar.setExpandedTitleTextColor(ColorStateList.valueOf(Color.argb(0,0,0,0)));
 
@@ -261,6 +269,40 @@ public class DisplayMovie extends AppCompatActivity {
         });
 
 
+    }
+
+    public void getNewMovie(String movieId){
+
+            //Put beautiful search algorithm here.
+        String value = "";
+        try {
+            value = (String) new CheckTMDbTask().execute("MOVIE_INFO", movieId).get();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            actMovId = Integer.parseInt(movieId);
+            JSONObject jmovie = new JSONObject(value);
+            String title = jmovie.getString("title");
+            FirebaseCrash.log("Got movie info for "+title);
+            float rating = (float)jmovie.getDouble("vote_average");
+            JSONArray jgenres = jmovie.getJSONArray("genres");
+            String[] genres = new String[jgenres.length()];
+            for(int i=0;i<jgenres.length(); i++){
+                genres[i] = ((JSONObject)jgenres.get(i)).getString("name");
+            }
+            String releaseDate = jmovie.getString("release_date");
+            int releaseYear = Integer.parseInt(releaseDate.split("-")[0]);
+            String synopsys = jmovie.getString("overview");
+            Bitmap poster = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w154"+jmovie.getString("poster_path")).get();
+            Bitmap backdrop = (Bitmap)new CheckTMDbTask().execute("GET_PICTURE", "http://image.tmdb.org/t/p/w1280"+jmovie.getString("backdrop_path")).get();
+
+            updateInterface(title, genres, rating, releaseYear, synopsys, poster, backdrop);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getNewMovie(){
