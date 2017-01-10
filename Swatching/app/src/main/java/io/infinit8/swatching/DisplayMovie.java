@@ -105,7 +105,7 @@ public class DisplayMovie extends AppCompatActivity {
         willwatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TSnackbar snackbar = TSnackbar.make(view, "You'll watch that movie.", Snackbar.LENGTH_SHORT);
+                TSnackbar snackbar = TSnackbar.make(view, "You'll watch that movie.", TSnackbar.LENGTH_SHORT);
                 View snackbarView = snackbar.getView();
                 TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
