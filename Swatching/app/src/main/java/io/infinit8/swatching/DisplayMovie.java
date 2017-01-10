@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
@@ -47,9 +49,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -78,7 +85,7 @@ public class DisplayMovie extends AppCompatActivity {
 
         FirebaseCrash.log("Application launched");
 
-        Context context = this;
+        final Context context = this;
 
         sharedPref = context.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
 
@@ -106,7 +113,7 @@ public class DisplayMovie extends AppCompatActivity {
         willwatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TSnackbar snackbar = TSnackbar.make(view, "You'll watch that movie.", Snackbar.LENGTH_SHORT);
+                TSnackbar snackbar = TSnackbar.make(view, "You'll watch that movie.", TSnackbar.LENGTH_SHORT);
                 View snackbarView = snackbar.getView();
                 TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
@@ -120,6 +127,24 @@ public class DisplayMovie extends AppCompatActivity {
 
                 willWatch.add(Integer.toString(actMovId));
                 sharedPref.edit().putStringSet("will_watch", willWatch).apply();
+
+                //Recupération Bitmap.
+                ImageView imgV = (ImageView)findViewById(R.id.cover_desc);
+                Bitmap bitmap = ((BitmapDrawable)imgV.getDrawable()).getBitmap();
+
+                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
+
+                try{
+                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "0");
+                    // Ajout dans la liste prise du cache.
+                    Movie m = new Movie(actMovId, ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString(), 0,null);
+                    cachedMoviesWillWatch.add(m);
+                    InternalStorage.writeObject(getApplicationContext(), "0", cachedMoviesWillWatch);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 getNewMovie();
             }
         });
@@ -141,6 +166,20 @@ public class DisplayMovie extends AppCompatActivity {
 
                 likedMovies.add(Integer.toString(actMovId));
                 sharedPref.edit().putStringSet("liked_movies", likedMovies).apply();
+
+                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
+
+                try{
+                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "1");
+                    // Ajout dans la liste prise du cache.
+                    Movie m = new Movie(actMovId, ((TextView)findViewById(R.id.txt_title_paralax)).getText().toString(), 0,null);
+                    cachedMoviesWillWatch.add(m);
+                    InternalStorage.writeObject(getApplicationContext(), "1", cachedMoviesWillWatch);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 getNewMovie();
             }
         });

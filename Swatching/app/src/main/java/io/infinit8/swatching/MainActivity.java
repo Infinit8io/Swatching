@@ -1,5 +1,7 @@
 package io.infinit8.swatching;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,10 +18,16 @@ import android.widget.Button;
 
 import com.google.firebase.crash.FirebaseCrash;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +41,28 @@ public class MainActivity extends AppCompatActivity {
             Intent in = new Intent(this, DisplayMovie.class);
             startActivity(in);
         }
+
+        ArrayList<Movie> emptyList = new ArrayList<Movie>();
+        // Création des fichiers de cache.
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "0", emptyList);
+            InternalStorage.writeObject(getApplicationContext(), "1", emptyList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_main);
+
+        alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(this, CheckIfAtHomeService.class);
+        alarmIntent = PendingIntent.getService(this, 0, myIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, alarmIntent);
 
         FirebaseCrash.log("Application first use");
 
