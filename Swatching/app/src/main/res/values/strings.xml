@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">Swatching</string>
 
     <!-- First Launch activity strings -->
@@ -18,4 +18,6 @@
 
     <!-- System related strings -->
     <string name="preferences_key">io.infinit8.swatching.preferences</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
