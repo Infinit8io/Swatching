@@ -1,6 +1,7 @@
 package io.infinit8.swatching;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -203,6 +204,16 @@ public class DisplayMovie extends AppCompatActivity {
                 getNewMovie();
             }
         });
+
+        Button profile = (Button)findViewById(R.id.profileBtn);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getApplicationContext(), Profile.class);
+                startActivity(in);
+            }
+        });
+
 
 
 

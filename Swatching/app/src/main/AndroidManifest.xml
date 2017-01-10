@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".ChooseMovies" />
         <activity android:name=".DisplayMovie" />
+        <activity android:name=".Profile" />
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling"
