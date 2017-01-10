@@ -18,4 +18,6 @@
 
     <!-- System related strings -->
     <string name="preferences_key">io.infinit8.swatching.preferences</string>
+    <string name="title_activity_set_home">SetHome</string>
+    <string name="why_home">This application needs to know your home location to enhance your experience with personnalized notifications ! Don't worry, this information will not be publicly published.</string>
 </resources>
