@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <GridView
+    <ListView
         android:id="@+id/listMovies"
         android:layout_below="@id/section_label"
         android:layout_width="match_parent"

@@ -23,7 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -58,6 +60,7 @@ public class Profile extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,8 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
@@ -111,18 +116,6 @@ public class Profile extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -131,6 +124,9 @@ public class Profile extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment
          */
+        //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
+        ArrayAdapter<String> adapter;
+
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -157,19 +153,56 @@ public class Profile extends AppCompatActivity {
             // La vue d'un onglet (tous utilisent la même).
             View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-            GridView gv = (GridView) rootView.findViewById(R.id.listMovies);
-            //Log.d("HELLO", "Coucou" + getArguments().getInt(ARG_SECTION_NUMBER));
+            ListView lv = (ListView) rootView.findViewById(R.id.listMovies);
 
             int listCase = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            // Attention c'est une arraylist !
-            ArrayList<String> watchedMovies = getArguments().getStringArrayList("watchedMovies");
+            Log.d("WHATA", "" + listCase);
+
+            if(listCase == 1){
+                Log.d("WHATA", "entre dans la section 1");
+                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
+                try {
+                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getActivity().getApplicationContext(), "0");
+
+                    ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
+
+                    // Création de la liste de strings
+                    for(int i=0;i<cachedMoviesWillWatch.size(); i++){
+                        stringMoviesWillWatch.add(cachedMoviesWillWatch.get(i).getTitle());
+                    }
+                    adapter=new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch);
+                    lv.setAdapter(adapter);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }else if(listCase == 2){
+                Log.d("WHATA", "entre dans la section 2");
+                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
+                try {
+                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getActivity().getApplicationContext(), "1");
+
+                    ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
+
+                    // Création de la liste de strings
+                    for(int i=0;i<cachedMoviesWillWatch.size(); i++){
+                        stringMoviesWillWatch.add(cachedMoviesWillWatch.get(i).getTitle());
+                    }
+                    adapter=new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch);
+                    lv.setAdapter(adapter);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
 
-            // Le texte de la TextView
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
 
@@ -182,8 +215,6 @@ public class Profile extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -204,7 +235,7 @@ public class Profile extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
