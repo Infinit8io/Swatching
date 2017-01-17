@@ -36,11 +36,22 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         Set<String> watchedMovies = sp.getStringSet("watched_movies", new HashSet<String>());
+
         if(watchedMovies.size() != 0){
             //There are some movies, not the first use
-            Intent in = new Intent(this, DisplayMovie.class);
+            String location = sp.getString("home_position", "UNDEFINED");
+            Intent in;
+            if(location.equals("UNDEFINED")){
+                //Home location not defined
+                in = new Intent(this, SetHome.class);
+            } else {
+                in = new Intent(this, DisplayMovie.class);
+            }
+
             startActivity(in);
         }
+
+
 
         ArrayList<Movie> emptyList = new ArrayList<Movie>();
         // Création des fichiers de cache.
@@ -92,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void chngAct(){
-        Intent in = new Intent(this, ChooseMovies.class);
+        Intent in = new Intent(this, SetHome.class);
         startActivity(in);
+        finish();
     }
 }

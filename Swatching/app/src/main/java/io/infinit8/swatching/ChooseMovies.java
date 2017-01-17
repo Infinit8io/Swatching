@@ -116,6 +116,7 @@ public class ChooseMovies extends AppCompatActivity {
     public void nextAct(){
         Intent in = new Intent(this, DisplayMovie.class);
         startActivity(in);
+        finish();
     }
 
     public ArrayList<Movie> getMoviesFromJson(){

@@ -44,12 +44,14 @@ public class CheckIfAtHomeService extends IntentService {
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         String homePosition = sp.getString("home_position", "UNDEFINED");
 
-        if(!homePosition.equals("UNDEFINED")) {
+        if(!homePosition.equals("UNDEFINED") && !homePosition.equals("UNAVAILABLE")) {
             //Home position already set.
             LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             try {
                 Location lastKnownLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 Location homeLocation = new Location("Home");
+                Log.d("home pos", homePosition);
+                Log.d("act pos", lastKnownLocation.getLatitude()+","+lastKnownLocation.getLongitude());
                 String[] latlon = homePosition.split(",");
                 homeLocation.setLatitude(Double.parseDouble(latlon[0]));
                 homeLocation.setLongitude(Double.parseDouble(latlon[1]));
@@ -57,7 +59,7 @@ public class CheckIfAtHomeService extends IntentService {
                     //User is at home
                     Set<String> willWatch = sp.getStringSet("will_watch", new HashSet<String>());
                     if(!willWatch.isEmpty()){
-                        String[] movieIds = (String[])willWatch.toArray();
+                        String[] movieIds = willWatch.toArray(new String[willWatch.size()]);
                         int movieIndex = new Random().nextInt(movieIds.length);
                         String selectedMovieId = movieIds[movieIndex];
                         String movieData = getMovieData(selectedMovieId);
