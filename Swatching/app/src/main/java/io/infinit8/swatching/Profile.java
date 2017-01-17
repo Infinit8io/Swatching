@@ -1,6 +1,7 @@
 package io.infinit8.swatching;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -60,6 +62,10 @@ public class Profile extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    public ListView lv;
+    public ArrayList<Movie> cachedMoviesWillWatch;
+    public ArrayList<Movie> cachedMoviesLiked;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +93,15 @@ public class Profile extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        try{
+            cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "0");
+            cachedMoviesLiked = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "1");
+
+        } catch(ClassNotFoundException cnfe){
+            cnfe.printStackTrace();
+        } catch(IOException ioe){
+            ioe.printStackTrace();
+        }
 
 
 
@@ -153,7 +168,10 @@ public class Profile extends AppCompatActivity {
             // La vue d'un onglet (tous utilisent la même).
             View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-            ListView lv = (ListView) rootView.findViewById(R.id.listMovies);
+
+            final Profile activity = (Profile)getActivity();
+            activity.lv = (ListView) rootView.findViewById(R.id.listMovies);
+
 
             int listCase = getArguments().getInt(ARG_SECTION_NUMBER);
 
@@ -161,45 +179,43 @@ public class Profile extends AppCompatActivity {
 
             if(listCase == 1){
                 Log.d("WHATA", "entre dans la section 1");
-                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
-                try {
-                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getActivity().getApplicationContext(), "0");
+
 
                     ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
 
                     // Création de la liste de strings
-                    for(int i=0;i<cachedMoviesWillWatch.size(); i++){
-                        stringMoviesWillWatch.add(cachedMoviesWillWatch.get(i).getTitle());
+                    for(int i=0;i<activity.cachedMoviesWillWatch.size(); i++){
+                        stringMoviesWillWatch.add(activity.cachedMoviesWillWatch.get(i).getTitle());
                     }
                     adapter=new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch);
-                    lv.setAdapter(adapter);
+                    activity.lv.setAdapter(adapter);
+                    activity.lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            activity.goToMoviePage(position, 0);
+                        }
+                    });
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+
             }else if(listCase == 2){
                 Log.d("WHATA", "entre dans la section 2");
-                ArrayList<Movie> cachedMoviesWillWatch = new ArrayList<Movie>();
-                try {
-                    cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getActivity().getApplicationContext(), "1");
-
                     ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
 
                     // Création de la liste de strings
-                    for(int i=0;i<cachedMoviesWillWatch.size(); i++){
-                        stringMoviesWillWatch.add(cachedMoviesWillWatch.get(i).getTitle());
+                    for(int i=0;i<activity.cachedMoviesLiked.size(); i++){
+                        stringMoviesWillWatch.add(activity.cachedMoviesLiked.get(i).getTitle());
                     }
                     adapter=new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch);
-                    lv.setAdapter(adapter);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                    activity.lv.setAdapter(adapter);
+                    activity.lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            activity.goToMoviePage(position, 1);
+                        }
+                    });
             }
+
+
 
 
 
@@ -208,7 +224,43 @@ public class Profile extends AppCompatActivity {
 
     }
 
+    public void goToMoviePage(int id, int list){
+        if(list == 0){
+            ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
 
+            // Création de la liste de strings
+            for(int i=0;i<cachedMoviesWillWatch.size(); i++){
+                stringMoviesWillWatch.add(cachedMoviesWillWatch.get(i).getTitle());
+            }
+
+            lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch));
+        } else {
+            ArrayList<String> stringMoviesWillWatch = new ArrayList<String>();
+
+            // Création de la liste de strings
+            for(int i=0;i<cachedMoviesLiked.size(); i++){
+                stringMoviesWillWatch.add(cachedMoviesLiked.get(i).getTitle());
+            }
+
+            lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, stringMoviesWillWatch));
+        }
+        String title = (String)lv.getItemAtPosition(id);
+        Intent in = new Intent(this, DisplayMovie.class);
+        for(Movie m : cachedMoviesWillWatch){
+            if(m.getTitle().equals(title)){
+                in.putExtra("movie_id", Integer.toString(m.getId()));
+                startActivity(in);
+                finish();
+            }
+        }
+        for(Movie m : cachedMoviesLiked){
+            if(m.getTitle().equals(title)){
+                in.putExtra("movie_id", Integer.toString(m.getId()));
+                startActivity(in);
+                finish();
+            }
+        }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
