@@ -119,7 +119,7 @@ public class Profile extends AppCompatActivity {
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 shareIntent.setType("text/plain");
-                startActivity(shareIntent);
+                startActivity(Intent.createChooser(shareIntent, "Share with..."));
             }
         });
 
