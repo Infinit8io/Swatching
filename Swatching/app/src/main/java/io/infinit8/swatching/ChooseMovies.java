@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,7 +53,7 @@ public class ChooseMovies extends AppCompatActivity {
 
         sharedPrefs = this.getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
         watchedMovies = sharedPrefs.getStringSet("watched_movies", new HashSet<String>());
-        likedGenres = sharedPrefs.getStringSet("liked_genres", new HashSet<String>());
+        likedGenres = sharedPrefs.getStringSet("liked_movies", new HashSet<String>());
 
         // Suppression du titre et full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -80,14 +81,18 @@ public class ChooseMovies extends AppCompatActivity {
             public void onClick(View view) {
                 // Enregistrement des éléments sélectionnés dans les listes
                 for (Movie m: chosenMovies) {
-                    watchedMovies.add(Integer.toString(m.getId()));
-                    likedGenres.add(Integer.toString(m.getIdGenre()));
+                    m.setPoster(null);
+                    likedGenres.add(Integer.toString(m.getId()));
                 }
 
                 // Enregistrement des listes dans les SharedPreferences
-                sharedPrefs.edit().putStringSet("watched_movies", watchedMovies).apply();
-                sharedPrefs.edit().putStringSet("liked_genres", likedGenres).apply();
-
+                sharedPrefs.edit().putStringSet("liked_movies", likedGenres).apply();
+                sharedPrefs.edit().putStringSet("watched_movies", likedGenres).apply();
+                try {
+                    InternalStorage.writeObject(getApplicationContext(), "1", chosenMovies);
+                } catch (IOException ex){
+                    Log.e("Write", "Can't write to internal storage");
+                }
                 // Changement d'activité
                 nextAct();
             }

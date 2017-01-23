@@ -66,6 +66,8 @@ public class Profile extends AppCompatActivity {
     public ArrayList<Movie> cachedMoviesWillWatch;
     public ArrayList<Movie> cachedMoviesLiked;
 
+    private TabLayout tabLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +84,10 @@ public class Profile extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         try{
             cachedMoviesWillWatch = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "0");
             cachedMoviesLiked = (ArrayList<Movie>) InternalStorage.readObject(getApplicationContext(), "1");
@@ -102,6 +97,31 @@ public class Profile extends AppCompatActivity {
         } catch(IOException ioe){
             ioe.printStackTrace();
         }
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int actTab = tabLayout.getSelectedTabPosition();
+                StringBuilder sb = new StringBuilder();
+                if(actTab == 0){ //Will watch
+                    sb.append("On Swatching, I said that I'll watch these movies:\n");
+                    for(Movie m : cachedMoviesWillWatch){
+                        sb.append(m.getTitle()+"\n");
+                    }
+                } else if(actTab == 1){ //liked
+                    sb.append("On Swatching, I said that I liked these movies:\n");
+                    for(Movie m : cachedMoviesLiked){
+                        sb.append(m.getTitle()+"\n");
+                    }
+                }
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                shareIntent.setType("text/plain");
+                startActivity(shareIntent);
+            }
+        });
 
 
 

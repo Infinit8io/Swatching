@@ -64,6 +64,7 @@ public class Movie implements Serializable{
     public Bitmap getPoster(){
         return poster;
     }
+    public void setPoster(Bitmap b){ this.poster = b;}
 
     public boolean getChecked(){ return checked; }
     public void setChecked(boolean isChecked){ this.checked = isChecked; }
