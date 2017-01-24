@@ -6,10 +6,13 @@
     android:layout_height="match_parent"
     tools:context="io.infinit8.swatching.MainActivity">
 
-    <WebView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/iv_background"/>
+        android:id="@+id/iv_background"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/theatre"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
